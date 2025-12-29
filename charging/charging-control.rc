@@ -1,0 +1,10 @@
+service vendor.nt-charging-control /vendor/bin/nt-charging-control
+    class hal
+    user system
+    group system
+    disabled
+
+on property:sys.boot_completed=1
+    chown system system /sys/class/qcom-battery/scenario_fcc
+
+    start vendor.nt-charging-control

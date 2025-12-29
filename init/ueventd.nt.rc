@@ -1,0 +1,11 @@
+#
+# Copyright (C) 2023 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# LEDs
+/dev/led_strips             0660   system       system
+
+# NFC
+/dev/pn553    0660    nfc               nfc

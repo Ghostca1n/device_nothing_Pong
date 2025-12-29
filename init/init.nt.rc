@@ -1,0 +1,83 @@
+#
+# Copyright (C) 2023 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+on boot
+    # Fingerprint
+    chown system system /dev/goodix_fp
+
+    # Gestures
+    chown system system /sys/devices/platform/goodix_ts.0/edge_mode
+    write /sys/devices/platform/goodix_ts.0/edge_mode 4
+    chown system system /sys/devices/platform/goodix_ts.0/gesture/fod_en
+    write /sys/devices/platform/goodix_ts.0/gesture/fod_en 1
+    chown system system /sys/devices/platform/goodix_ts.0/gesture/single_en
+    write /sys/devices/platform/goodix_ts.0/gesture/single_en 1
+
+    # Glyphs
+    chown system system /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/all_white_brightness
+    chmod 0666 /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/all_white_brightness
+    chown system system /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/operating_mode
+    chmod 0666 /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/operating_mode
+    chown system system /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/single_brightness
+    chmod 0666 /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/single_brightness
+    chown system system /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/frame_brightness
+    chmod 0666 /sys/devices/platform/soc/994000.i2c/i2c-0/0-003a/leds/led_strips/frame_brightness
+
+    # Vibrator
+    chown system system /sys/class/leds/vibrator/activate
+    chown system system /sys/class/leds/vibrator/duration
+    chown system system /sys/class/leds/vibrator/state
+
+on post-fs-data
+    # Camera
+    mkdir /data/vendor/camera 0775 camera camera
+    copy /mnt/vendor/persist/camera/bokeh_caldata_uw_persist.bin /data/vendor/camera/bokeh_caldata_uw_persist.bin
+    chmod 0444 /data/vendor/camera/bokeh_caldata_uw_persist.bin
+    chown cameraserver audio /data/vendor/camera/bokeh_caldata_uw_persist.bin
+    copy /mnt/vendor/persist/camera/ois_caldata_wide_persist.bin /data/vendor/camera/ois_caldata_wide_persist.bin
+    chmod 0444 /data/vendor/camera/ois_caldata_wide_persist.bin
+    chown cameraserver audio /data/vendor/camera/ois_caldata_wide_persist.bin
+
+    # Enable WLAN SSR
+    write /sys/kernel/cnss/recovery 1
+
+on property:sys.boot_completed=1
+    chown system system /sys/class/qcom-battery/wireless_boost_en
+    chown system system /sys/class/qcom-battery/wls_reverse_status
+
+    # OTG
+    chown system system /proc/charger/nt_otg_enable
+    write /proc/charger/nt_otg_enable 4
+    
+    # Enable PowerHAL hint processing
+    setprop vendor.powerhal.init 1
+
+on property:vendor.post_boot.parsed=1
+    # Kill WALT CPU input boost
+    write /proc/sys/walt/input_boost/input_boost_freq "0 0 0 0 0 0 0"
+    write /proc/sys/walt/input_boost/input_boost_ms 0
+
+    # dex2oat
+    setprop dalvik.vm.dex2oat-cpu-set 0,1,2,3,4,5,6
+    setprop dalvik.vm.dex2oat-threads 6
+    
+    # IRQ Tuning
+    # IRQ 243: msm_drm
+    # IRQ 240: kgsl_3d0_irq
+    write /proc/irq/243/smp_affinity_list 2
+    write /proc/irq/240/smp_affinity_list 1
+
+    # Configure uclamp
+    write /dev/cpuctl/background/cpu.uclamp.max 60
+    write /dev/cpuctl/system-background/cpu.uclamp.max 70
+    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
+
+    chown system graphics /sys/class/drm/card0/sde-crtc-0/measured_fps
+    chmod 0660 /sys/class/drm/card0/sde-crtc-0/measured_fps
+
+    chown system system /sys/class/power_supply/battery/temp
+    chmod 0660 /sys/class/power_supply/battery/temp
+
