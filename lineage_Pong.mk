@@ -34,32 +34,21 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 # Singing keys
 $(call inherit-product, vendor/lineage-priv/keys/keys.mk)
 
-# Define rear camera specs
-AXION_CAMERA_REAR_INFO := 50,50
-
-# Blur
+#Mist-OS-Flags
+MISTOS_MAINTAINER := Ghostca1n
+WITH_GMS := true
+TARGET_HAS_UDFPS := true
+TARGET_USES_MINI_GAPPS := true
 TARGET_ENABLE_BLUR := true
+TARGET_SUPPORTS_QUICK_TAP := true
+BYPASS_CHARGE_SUPPORTED := true 
 
-# Define front camera specs
-AXION_CAMERA_FRONT_INFO := 32
-
-# Maintainer name
-AXION_MAINTAINER := Ghostca1n
-
-# Processor name
-AXION_PROCESSOR := Snapdragon®_8+_Gen_1 
-
-# Default core groups (if not overridden by the builder)
-AXION_CPU_SMALL_CORES := 0,1,2,3
-AXION_CPU_BIG_CORES := 4,5,6,7
-AXION_CPU_UNLIMIT_UI := 0-7
-AXION_CPU_BG := 0-2
-AXION_CPU_FG := 0-7
-AXION_CPU_LIMIT_BG := 0-1
-AXION_CPU_LIMIT_UI := 0-4
-AXION_DEBUGGING_ENABLED := false
-
-# Lineage prebuilts
-ifneq ($(WITH_GMS),true)
-TARGET_INCLUDES_LOS_PREBUILTS := false
-endif
+#Phone Info
+ro.mist.display=1080 x 2412, 120 hz
+ro.mist.battery=4700mah
+ro.mist.soc=Snapdragon® 8+Gen 1
+ro.mist.camera=50MP + 50MP
+ro.mist.front=32MP
+ro.mist.platform=SM8475-AB
+ro.mist.screen=6.7' LTPO OLED
+ro.mist.device.name=Nothing Phone 2
