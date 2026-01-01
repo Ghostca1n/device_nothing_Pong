@@ -12,9 +12,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/nothing/Pong/device.mk)
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+$(call inherit-product, vendor/alpha/config/common_full_phone.mk)
 
-PRODUCT_NAME := lineage_Pong
+PRODUCT_NAME := alpha_Pong
 PRODUCT_DEVICE := Pong
 PRODUCT_MANUFACTURER := Nothing
 PRODUCT_BRAND := Nothing
@@ -34,30 +34,40 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 # Singing keys
 $(call inherit-product, vendor/lineage-priv/keys/keys.mk)
 
-# Define rear camera specs
-AXION_CAMERA_REAR_INFO := 50,50
-
-# Blur
+# Device config
+TARGET_HAS_UDFPS := true
 TARGET_ENABLE_BLUR := true
+TARGET_EXCLUDES_AUDIOFX := true
+TARGET_FACE_UNLOCK_SUPPORTED := true
 
-# Define front camera specs
-AXION_CAMERA_FRONT_INFO := 32
+# Build config
+# TARGET_BUILD_PACKAGE options:
+# 1 - vanilla (default)
+# 2 - microg
+# 3 - gapps
+TARGET_BUILD_PACKAGE := 3
+ifeq ($(TARGET_BUILD_PACKAGE),3)
+  # (valid only for GAPPS builds)
+  TARGET_INCLUDE_GOOGLE_COMMS := true
+  TARGET_INCLUDE_PIXEL_LAUNCHER := true
+  TARGET_SUPPORTS_QUICK_TAP := true
+  TARGET_SUPPORTS_CALL_RECORDING := true
+  TARGET_INCLUDE_STOCK_ARCORE := true
+  TARGET_INCLUDE_LIVE_WALLPAPERS := true
+  TARGET_SUPPORTS_GOOGLE_RECORDER := false
+endif
 
-# Maintainer name
-AXION_MAINTAINER := Ghostca1n
+# Debugging
+TARGET_INCLUDE_MATLOG := false
+WITH_ADB_INSECURE := false
 
-# Processor name
-AXION_PROCESSOR := Snapdragon®_8+_Gen_1 
+# Extras
+TARGET_INCLUDE_SIMPLE_TUNE := true
 
-# Default core groups (if not overridden by the builder)
-AXION_CPU_SMALL_CORES := 0,1,2,3
-AXION_CPU_BIG_CORES := 4,5,6,7
-AXION_CPU_UNLIMIT_UI := 0-7
-AXION_CPU_BG := 0-2
-AXION_CPU_FG := 0-7
-AXION_CPU_LIMIT_BG := 0-1
-AXION_CPU_LIMIT_UI := 0-4
-AXION_DEBUGGING_ENABLED := false
+# Maintainer
+ALPHA_BUILD_TYPE := Unofficial
+ALPHA_MAINTAINER := Ghostca1n
+
 
 # Lineage prebuilts
 ifneq ($(WITH_GMS),true)
