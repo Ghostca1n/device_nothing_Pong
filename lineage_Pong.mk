@@ -34,32 +34,16 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 # Singing keys
 $(call inherit-product, vendor/lineage-priv/keys/keys.mk)
 
-# Define rear camera specs
-AXION_CAMERA_REAR_INFO := 50,50
 
-# Blur
+EVO_BUILD_TYPE := Unofficial
+TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_BUILD_APERTURE_CAMERA := false
+TARGET_HAS_UDFPS := true
+TARGET_INCLUDE_ACCORD := true
+BUILD_BCR := true
+WITH_GMS := true
 TARGET_ENABLE_BLUR := true
 
-# Define front camera specs
-AXION_CAMERA_FRONT_INFO := 32
+# Bypass charging node /sys/class/power_supply/battery/input_suspend
+BYPASS_CHARGE_SUPPORTED := true
 
-# Maintainer name
-AXION_MAINTAINER := Ghostca1n
-
-# Processor name
-AXION_PROCESSOR := Snapdragon®_8+_Gen_1 
-
-# Default core groups (if not overridden by the builder)
-AXION_CPU_SMALL_CORES := 0,1,2,3
-AXION_CPU_BIG_CORES := 4,5,6,7
-AXION_CPU_UNLIMIT_UI := 0-7
-AXION_CPU_BG := 0-2
-AXION_CPU_FG := 0-7
-AXION_CPU_LIMIT_BG := 0-1
-AXION_CPU_LIMIT_UI := 0-4
-AXION_DEBUGGING_ENABLED := false
-
-# Lineage prebuilts
-ifneq ($(WITH_GMS),true)
-TARGET_INCLUDES_LOS_PREBUILTS := false
-endif
